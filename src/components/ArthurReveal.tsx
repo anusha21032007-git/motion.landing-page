@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Cpu, ShieldCheck, Cloud, Zap } from 'lucide-react';
 
-const FRAME_COUNT = 120;
+const FRAME_COUNT = 200;
 
 const ArthurReveal = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -36,10 +36,8 @@ const ArthurReveal = () => {
     const preloadImages = () => {
       for (let i = 0; i < FRAME_COUNT; i++) {
         const img = new Image();
-        // Fallback to the provided key visuals if individual frames aren't found
-        // In a real prod environment, these would be frame_000.webp etc.
-        img.src = `/sequence/frame_${i.toString().padStart(3, '0')}.webp`;
-        
+        // Load ezgif frames from absolute path using vite fs routing
+        img.src = `/@fs/c:/Users/Anusha Narasimman/Downloads/ezgif-8330b8ed2e2b5ca8-png-split/ezgif-frame-${(i + 1).toString().padStart(3, '0')}.png`;
         img.onload = () => {
           loadedCount++;
           setLoadingProgress(Math.floor((loadedCount / FRAME_COUNT) * 100));
@@ -54,7 +52,7 @@ const ArthurReveal = () => {
           loadedCount++;
           if (loadedCount === FRAME_COUNT) setIsLoaded(true);
         };
-        
+
         loadedImages[i] = img;
       }
     };
@@ -66,7 +64,7 @@ const ArthurReveal = () => {
   useEffect(() => {
     const render = () => {
       if (!canvasRef.current || images.length === 0) return;
-      
+
       const context = canvasRef.current.getContext('2d');
       if (!context) return;
 
@@ -83,7 +81,7 @@ const ArthurReveal = () => {
 
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(
-          img, 
+          img,
           0, 0, img.width, img.height,
           centerShift_x, centerShift_y, img.width * ratio, img.height * ratio
         );
@@ -92,7 +90,7 @@ const ArthurReveal = () => {
 
     const unsubscribe = currentFrame.on("change", render);
     render(); // Initial render
-    
+
     return () => unsubscribe();
   }, [images, currentFrame]);
 
@@ -130,12 +128,12 @@ const ArthurReveal = () => {
       {/* Loading Screen */}
       <AnimatePresence>
         {!isLoaded && (
-          <motion.div 
+          <motion.div
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#050505]"
           >
             <div className="w-48 h-[1px] bg-white/10 mb-4 overflow-hidden relative">
-              <motion.div 
+              <motion.div
                 className="absolute inset-y-0 left-0 bg-blue-500"
                 style={{ width: `${loadingProgress}%` }}
               />
@@ -153,7 +151,7 @@ const ArthurReveal = () => {
         />
 
         {/* Scroll to Explore */}
-        <motion.div 
+        <motion.div
           style={{ opacity: scrollIndicatorOpacity }}
           className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
@@ -169,7 +167,7 @@ const ArthurReveal = () => {
         {/* Text Content Sections */}
         <div className="absolute inset-0 pointer-events-none">
           {/* Phase 1: Hero */}
-          <motion.div 
+          <motion.div
             style={{ opacity: textOpacity1, y: textY1 }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
@@ -178,7 +176,7 @@ const ArthurReveal = () => {
           </motion.div>
 
           {/* Phase 2: Intelligence */}
-          <motion.div 
+          <motion.div
             style={{ opacity: textOpacity2, y: textY2 }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
@@ -200,7 +198,7 @@ const ArthurReveal = () => {
           </motion.div>
 
           {/* Phase 3: Power */}
-          <motion.div 
+          <motion.div
             style={{ opacity: textOpacity3, y: textY3 }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
@@ -211,13 +209,13 @@ const ArthurReveal = () => {
           </motion.div>
 
           {/* Phase 4: Engineering */}
-          <motion.div 
+          <motion.div
             style={{ opacity: textOpacity4, y: textY4 }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
             <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 uppercase">Engineered Inside Out</h2>
             <p className="text-white/40 mb-12 max-w-xl text-sm tracking-widest uppercase">Precision. Intelligence. Performance.</p>
-            
+
             <div className="flex gap-4 pointer-events-auto">
               <button className="px-8 py-3 bg-white text-black text-xs font-bold uppercase tracking-[0.2em] rounded-full hover:bg-blue-500 hover:text-white transition-all duration-500">
                 Explore Features
