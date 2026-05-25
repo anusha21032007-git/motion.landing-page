@@ -33,7 +33,7 @@ const ArthurReveal = () => {
     const preloadImages = () => {
       for (let i = 0; i < FRAME_COUNT; i++) {
         const img = new Image();
-        img.src = `/@fs/c:/Users/Anusha Narasimman/Downloads/ezgif-8330b8ed2e2b5ca8-png-split/ezgif-frame-${(i + 1).toString().padStart(3, '0')}.png`;
+        img.src = `/ezgif/ezgif-frame-${String(i + 1).padStart(3, "0")}.png`;
         img.onload = () => {
           loadedCount++;
           setLoadingProgress(Math.floor((loadedCount / FRAME_COUNT) * 100));
