@@ -33,6 +33,7 @@ const ArthurReveal = () => {
     const preloadImages = () => {
       for (let i = 0; i < FRAME_COUNT; i++) {
         const img = new Image();
+        // Using relative path for robustness
         img.src = `/ezgif/ezgif-frame-${String(i + 1).padStart(3, "0")}.png`;
         img.onload = () => {
           loadedCount++;
@@ -66,7 +67,7 @@ const ArthurReveal = () => {
         const canvas = canvasRef.current;
         const hRatio = canvas.width / img.width;
         const vRatio = canvas.height / img.height;
-        const ratio = Math.min(hRatio, vRatio);
+        const ratio = Math.max(hRatio, vRatio); // Use Math.max to fill screen
         const centerShift_x = (canvas.width - img.width * ratio) / 2;
         const centerShift_y = (canvas.height - img.height * ratio) / 2;
 
@@ -112,8 +113,8 @@ const ArthurReveal = () => {
   const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
 
   // Readability shadow style
-  const headingShadow = "drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]";
-  const subShadow = "drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]";
+  const headingShadow = "drop-shadow-[0_4px_12px_rgba(0,0,0,1)]";
+  const subShadow = "drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]";
 
   return (
     <div ref={containerRef} className="relative h-[500vh] bg-[#050505]">
@@ -135,14 +136,15 @@ const ArthurReveal = () => {
       </AnimatePresence>
 
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
-        {/* Canvas Background with subtle dimming for readability */}
-        <div className="absolute inset-0 z-0">
+        {/* Canvas Background with aggressive mask to blend with background */}
+        <div className="absolute inset-0 z-0 canvas-container">
           <canvas
             ref={canvasRef}
-            className="w-full h-full object-contain pointer-events-none opacity-70"
+            className="w-full h-full pointer-events-none opacity-80 transition-opacity duration-700"
           />
-          {/* Subtle vignette to focus on text */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)] pointer-events-none" />
+          {/* Layered gradients to hide any potential edges */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505] pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-transparent to-[#050505] pointer-events-none opacity-50" />
         </div>
 
         <motion.div
@@ -165,8 +167,8 @@ const ArthurReveal = () => {
             style={{ opacity: textOpacity1, y: textY1 }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
-            <h1 className={`text-7xl md:text-9xl font-extrabold tracking-tighter mb-4 text-white ${headingShadow}`}>ARTHUR</h1>
-            <p className={`text-xl md:text-2xl text-white/80 font-medium tracking-wide ${subShadow}`}>Engineered for the future.</p>
+            <h1 className={`text-7xl md:text-9xl font-black tracking-tighter mb-4 text-white ${headingShadow}`}>ARTHUR</h1>
+            <p className={`text-xl md:text-2xl text-white/90 font-medium tracking-wide ${subShadow}`}>Engineered for the future.</p>
           </motion.div>
 
           {/* Phase 2: Intelligence */}
@@ -174,19 +176,19 @@ const ArthurReveal = () => {
             style={{ opacity: textOpacity2, y: textY2 }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
-            <h2 className={`text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 uppercase text-white ${headingShadow}`}>Intelligence Unleashed</h2>
-            <div className="flex flex-wrap justify-center gap-8 mt-4 bg-black/20 backdrop-blur-sm p-6 rounded-full border border-white/5">
-              <div className="flex items-center gap-2">
-                <Cpu size={20} className="text-blue-500" />
-                <span className="text-xs uppercase tracking-widest font-bold text-white/90">Neural Compute</span>
+            <h2 className={`text-5xl md:text-8xl font-black tracking-tighter mb-6 uppercase text-white ${headingShadow}`}>Intelligence Unleashed</h2>
+            <div className="flex flex-wrap justify-center gap-8 mt-4 bg-black/40 backdrop-blur-xl p-8 rounded-full border border-white/10 shadow-2xl">
+              <div className="flex items-center gap-3">
+                <Cpu size={24} className="text-blue-500" />
+                <span className="text-xs uppercase tracking-[0.3em] font-black text-white">Neural Compute</span>
               </div>
-              <div className="flex items-center gap-2">
-                <ShieldCheck size={20} className="text-blue-500" />
-                <span className="text-xs uppercase tracking-widest font-bold text-white/90">Cyber Security</span>
+              <div className="flex items-center gap-3">
+                <ShieldCheck size={24} className="text-blue-500" />
+                <span className="text-xs uppercase tracking-[0.3em] font-black text-white">Cyber Security</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Cloud size={20} className="text-blue-500" />
-                <span className="text-xs uppercase tracking-widest font-bold text-white/90">Cloud Sync</span>
+              <div className="flex items-center gap-3">
+                <Cloud size={24} className="text-blue-500" />
+                <span className="text-xs uppercase tracking-[0.3em] font-black text-white">Cloud Sync</span>
               </div>
             </div>
           </motion.div>
@@ -196,8 +198,8 @@ const ArthurReveal = () => {
             style={{ opacity: textOpacity3, y: textY3 }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
-            <h2 className={`text-5xl md:text-7xl font-extrabold tracking-tighter mb-4 uppercase text-white ${headingShadow}`}>Power in Motion</h2>
-            <p className={`text-lg md:text-xl text-white/90 max-w-2xl mx-auto font-medium bg-black/40 backdrop-blur-md p-4 rounded-xl ${subShadow}`}>
+            <h2 className={`text-5xl md:text-8xl font-black tracking-tighter mb-4 uppercase text-white ${headingShadow}`}>Power in Motion</h2>
+            <p className={`text-lg md:text-2xl text-white max-w-2xl mx-auto font-bold bg-black/60 backdrop-blur-2xl p-8 rounded-2xl border border-white/5 shadow-2xl ${subShadow}`}>
               A symphony of performance and elegance, built for those who dare to build what's next.
             </p>
           </motion.div>
@@ -207,14 +209,15 @@ const ArthurReveal = () => {
             style={{ opacity: textOpacity4, y: textY4 }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
-            <h2 className={`text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 uppercase text-white ${headingShadow}`}>Engineered Inside Out</h2>
-            <p className={`text-white/80 mb-12 max-w-xl text-sm tracking-[0.3em] uppercase font-bold ${subShadow}`}>Precision. Intelligence. Performance.</p>
+            <h2 className={`text-5xl md:text-8xl font-black tracking-tighter mb-6 uppercase text-white ${headingShadow}`}>Engineered Inside Out</h2>
+            <p className={`text-white/70 mb-12 max-w-xl text-xs tracking-[0.5em] uppercase font-black ${subShadow}`}>Precision • Intelligence • Performance</p>
 
-            <div className="flex gap-4 pointer-events-auto">
-              <button className="px-10 py-4 bg-white text-black text-xs font-black uppercase tracking-[0.2em] rounded-full hover:bg-blue-600 hover:text-white transition-all duration-500 shadow-xl shadow-blue-500/10">
-                Explore Features
+            <div className="flex flex-col md:flex-row gap-6 pointer-events-auto">
+              <button className="group relative px-12 py-5 bg-white text-black text-xs font-black uppercase tracking-[0.3em] rounded-full overflow-hidden transition-all duration-500 hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(255,255,255,0.2)]">
+                <span className="relative z-10">Explore Features</span>
+                <div className="absolute inset-0 bg-blue-600 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
               </button>
-              <button className="px-10 py-4 border-2 border-white/20 text-white text-xs font-black uppercase tracking-[0.2em] rounded-full hover:bg-white/10 transition-all duration-500 backdrop-blur-sm">
+              <button className="px-12 py-5 border-2 border-white/20 text-white text-xs font-black uppercase tracking-[0.3em] rounded-full hover:bg-white/10 hover:border-white transition-all duration-500 backdrop-blur-md active:scale-95">
                 Watch Experience
               </button>
             </div>
