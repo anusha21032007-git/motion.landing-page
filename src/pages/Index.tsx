@@ -2,31 +2,43 @@
 
 import React from 'react';
 import ArthurReveal from '@/components/ArthurReveal';
-import { Mail, Github, Twitter, Instagram, Globe } from 'lucide-react';
+import { Mail, Github, Twitter, Instagram, Globe, Cpu, Zap, Shield, ShoppingBag } from 'lucide-react';
 
 const Index = () => {
+  const navItems = [
+    { name: 'Systems', icon: <Cpu size={14} /> },
+    { name: 'Vision', icon: <Zap size={14} /> },
+    { name: 'Security', icon: <Shield size={14} /> },
+    { name: 'Order', icon: <ShoppingBag size={14} /> },
+  ];
+
   return (
     <main className="relative w-full bg-[#050505] selection:bg-blue-500/30">
-      {/* Luxury Navigation with enhanced visibility */}
+      {/* Luxury Navigation */}
       <nav className="fixed top-0 left-0 w-full z-40 p-8 flex justify-between items-center pointer-events-none">
-        <div className="text-[12px] tracking-[0.8em] font-black uppercase pointer-events-auto cursor-pointer mix-blend-difference drop-shadow-md">
+        {/* Logo */}
+        <div className="text-[14px] tracking-[0.8em] font-black uppercase pointer-events-auto cursor-pointer mix-blend-difference drop-shadow-md">
           Arthur
         </div>
-        <div className="hidden md:flex gap-12 pointer-events-auto bg-black/10 backdrop-blur-sm px-8 py-3 rounded-full border border-white/5">
-          {['Systems', 'Vision', 'Security', 'Order'].map((item) => (
+
+        {/* Center Navigation with Icons */}
+        <div className="hidden md:flex gap-8 pointer-events-auto bg-black/40 backdrop-blur-md px-10 py-4 rounded-full border border-white/10 shadow-2xl">
+          {navItems.map((item) => (
             <a 
-              key={item} 
+              key={item.name} 
               href="#" 
-              className="text-[10px] tracking-[0.4em] uppercase text-white/60 hover:text-white font-bold transition-colors duration-300 drop-shadow-sm"
+              className="group flex items-center gap-3 text-[10px] tracking-[0.4em] uppercase text-white/50 hover:text-white font-bold transition-all duration-300 drop-shadow-sm"
             >
-              {item}
+              <span className="text-white/30 group-hover:text-blue-400 transition-colors duration-300">
+                {item.icon}
+              </span>
+              {item.name}
             </a>
           ))}
         </div>
-        <div className="pointer-events-auto cursor-pointer flex flex-col gap-1.5 items-end">
-          <div className="w-8 h-[2px] bg-white drop-shadow-md" />
-          <div className="w-5 h-[2px] bg-white drop-shadow-md" />
-        </div>
+
+        {/* Right spacing - keeping it clean as requested */}
+        <div className="w-24 hidden md:block" />
       </nav>
 
       {/* Main Scrollytelling Section */}
