@@ -7,25 +7,25 @@ import { Mail, Github, Twitter, Instagram, Globe } from 'lucide-react';
 const Index = () => {
   return (
     <main className="relative w-full bg-[#050505] selection:bg-blue-500/30">
-      {/* Luxury Navigation */}
+      {/* Luxury Navigation with enhanced visibility */}
       <nav className="fixed top-0 left-0 w-full z-40 p-8 flex justify-between items-center pointer-events-none">
-        <div className="text-[10px] tracking-[0.8em] font-bold uppercase pointer-events-auto cursor-pointer mix-blend-difference">
+        <div className="text-[12px] tracking-[0.8em] font-black uppercase pointer-events-auto cursor-pointer mix-blend-difference drop-shadow-md">
           Arthur
         </div>
-        <div className="hidden md:flex gap-12 pointer-events-auto">
+        <div className="hidden md:flex gap-12 pointer-events-auto bg-black/10 backdrop-blur-sm px-8 py-3 rounded-full border border-white/5">
           {['Systems', 'Vision', 'Security', 'Order'].map((item) => (
             <a 
               key={item} 
               href="#" 
-              className="text-[9px] tracking-[0.4em] uppercase text-white/40 hover:text-white transition-colors duration-300"
+              className="text-[10px] tracking-[0.4em] uppercase text-white/60 hover:text-white font-bold transition-colors duration-300 drop-shadow-sm"
             >
               {item}
             </a>
           ))}
         </div>
-        <div className="pointer-events-auto cursor-pointer">
-          <div className="w-6 h-[1px] bg-white mb-1.5" />
-          <div className="w-4 h-[1px] bg-white ml-auto" />
+        <div className="pointer-events-auto cursor-pointer flex flex-col gap-1.5 items-end">
+          <div className="w-8 h-[2px] bg-white drop-shadow-md" />
+          <div className="w-5 h-[2px] bg-white drop-shadow-md" />
         </div>
       </nav>
 
@@ -33,51 +33,59 @@ const Index = () => {
       <ArthurReveal />
 
       {/* Footer / Brand Experience Section */}
-      <footer className="relative bg-[#050505] border-t border-white/5 pt-32 pb-12 px-6 overflow-hidden">
+      <footer className="relative bg-[#050505] border-t border-white/10 pt-32 pb-12 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-16 mb-32">
             <div className="col-span-1 md:col-span-2">
-              <h2 className="text-4xl font-bold tracking-tighter mb-8 bg-gradient-to-r from-white to-white/20 bg-clip-text text-transparent">
+              <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-8 bg-gradient-to-r from-white to-white/40 bg-clip-text text-transparent drop-shadow-sm">
                 Join the vanguard of <br /> computational evolution.
               </h2>
-              <div className="flex gap-6 mt-12">
-                <a href="#" className="text-white/40 hover:text-white transition-colors"><Twitter size={18} /></a>
-                <a href="#" className="text-white/40 hover:text-white transition-colors"><Instagram size={18} /></a>
-                <a href="#" className="text-white/40 hover:text-white transition-colors"><Github size={18} /></a>
-                <a href="#" className="text-white/40 hover:text-white transition-colors"><Mail size={18} /></a>
+              <div className="flex gap-8 mt-12">
+                <a href="#" className="text-white/60 hover:text-white transition-colors"><Twitter size={20} /></a>
+                <a href="#" className="text-white/60 hover:text-white transition-colors"><Instagram size={20} /></a>
+                <a href="#" className="text-white/60 hover:text-white transition-colors"><Github size={20} /></a>
+                <a href="#" className="text-white/60 hover:text-white transition-colors"><Mail size={20} /></a>
               </div>
             </div>
 
             <div>
-              <h3 className="text-[10px] uppercase tracking-[0.3em] text-white/20 mb-8">Ecosystem</h3>
-              <ul className="space-y-4">
+              <h3 className="text-[11px] uppercase tracking-[0.4em] font-black text-white/30 mb-8">Ecosystem</h3>
+              <ul className="space-y-5">
                 {['Neural OS', 'Quantum Kernel', 'Arthur Cloud', 'Security Layer'].map(item => (
-                  <li key={item}><a href="#" className="text-xs text-white/40 hover:text-white transition-colors tracking-wide">{item}</a></li>
+                  <li key={item}>
+                    <a href="#" className="text-sm font-bold text-white/70 hover:text-white transition-colors tracking-wide">
+                      {item}
+                    </a>
+                  </li>
                 ))}
               </ul>
             </div>
 
             <div>
-              <h3 className="text-[10px] uppercase tracking-[0.3em] text-white/20 mb-8">Inquiry</h3>
-              <ul className="space-y-4">
+              <h3 className="text-[11px] uppercase tracking-[0.4em] font-black text-white/30 mb-8">Inquiry</h3>
+              <ul className="space-y-5">
                 {['Press Kit', 'Investor Relations', 'Enterprise Sales', 'Career Path'].map(item => (
-                  <li key={item}><a href="#" className="text-xs text-white/40 hover:text-white transition-colors tracking-wide">{item}</a></li>
+                  <li key={item}>
+                    <a href="#" className="text-sm font-bold text-white/70 hover:text-white transition-colors tracking-wide">
+                      {item}
+                    </a>
+                  </li>
                 ))}
               </ul>
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8 pt-12 border-t border-white/5">
-            <div className="flex items-center gap-8">
-              <p className="text-[9px] tracking-[0.3em] uppercase text-white/20">© 2024 Arthur Computer Systems</p>
-              <div className="flex gap-6">
-                <a href="#" className="text-[9px] tracking-[0.3em] uppercase text-white/20 hover:text-white transition-colors">Privacy</a>
-                <a href="#" className="text-[9px] tracking-[0.3em] uppercase text-white/20 hover:text-white transition-colors">Legal</a>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8 pt-12 border-t border-white/10">
+            <div className="flex items-center gap-12">
+              <p className="text-[10px] tracking-[0.4em] font-black uppercase text-white/40">© 2024 Arthur Computer Systems</p>
+              <div className="flex gap-8">
+                <a href="#" className="text-[10px] tracking-[0.4em] font-black uppercase text-white/40 hover:text-white transition-colors">Privacy</a>
+                <a href="#" className="text-[10px] tracking-[0.4em] font-black uppercase text-white/40 hover:text-white transition-colors">Legal</a>
               </div>
             </div>
             
-            <div className="flex items-center gap-2 text-[9px] tracking-[0.3em] uppercase text-white/20">
-              <Globe size={10} />
+            <div className="flex items-center gap-2 text-[10px] tracking-[0.4em] font-black uppercase text-white/40">
+              <Globe size={12} />
               <span>Global / EN-US</span>
             </div>
           </div>

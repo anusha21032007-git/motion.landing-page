@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Cpu, ShieldCheck, Cloud, Zap } from 'lucide-react';
+import { ChevronDown, Cpu, ShieldCheck, Cloud } from 'lucide-react';
 
 const FRAME_COUNT = 200;
 
@@ -13,13 +13,11 @@ const ArthurReveal = () => {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Scroll tracking
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
   });
 
-  // Smooth frame interpolation
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -28,7 +26,6 @@ const ArthurReveal = () => {
 
   const currentFrame = useTransform(smoothProgress, [0, 1], [0, FRAME_COUNT - 1]);
 
-  // Preload images
   useEffect(() => {
     let loadedCount = 0;
     const loadedImages: HTMLImageElement[] = [];
@@ -36,7 +33,6 @@ const ArthurReveal = () => {
     const preloadImages = () => {
       for (let i = 0; i < FRAME_COUNT; i++) {
         const img = new Image();
-        // Load ezgif frames from absolute path using vite fs routing
         img.src = `/@fs/c:/Users/Anusha Narasimman/Downloads/ezgif-8330b8ed2e2b5ca8-png-split/ezgif-frame-${(i + 1).toString().padStart(3, '0')}.png`;
         img.onload = () => {
           loadedCount++;
@@ -46,13 +42,10 @@ const ArthurReveal = () => {
             setIsLoaded(true);
           }
         };
-
         img.onerror = () => {
-          // If sequence missing, we use the fallback logic to at least show something
           loadedCount++;
           if (loadedCount === FRAME_COUNT) setIsLoaded(true);
         };
-
         loadedImages[i] = img;
       }
     };
@@ -60,11 +53,9 @@ const ArthurReveal = () => {
     preloadImages();
   }, []);
 
-  // Draw to canvas
   useEffect(() => {
     const render = () => {
       if (!canvasRef.current || images.length === 0) return;
-
       const context = canvasRef.current.getContext('2d');
       if (!context) return;
 
@@ -89,12 +80,10 @@ const ArthurReveal = () => {
     };
 
     const unsubscribe = currentFrame.on("change", render);
-    render(); // Initial render
-
+    render();
     return () => unsubscribe();
   }, [images, currentFrame]);
 
-  // Responsive canvas scaling
   useEffect(() => {
     const handleResize = () => {
       if (canvasRef.current) {
@@ -102,13 +91,12 @@ const ArthurReveal = () => {
         canvasRef.current.height = window.innerHeight * window.devicePixelRatio;
       }
     };
-
     window.addEventListener('resize', handleResize);
     handleResize();
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Text animations
+  // Section transformations
   const textOpacity1 = useTransform(scrollYProgress, [0, 0.1, 0.2, 0.25], [0, 1, 1, 0]);
   const textY1 = useTransform(scrollYProgress, [0, 0.1, 0.2, 0.25], [20, 0, 0, -20]);
 
@@ -123,9 +111,12 @@ const ArthurReveal = () => {
 
   const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
 
+  // Readability shadow style
+  const headingShadow = "drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]";
+  const subShadow = "drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]";
+
   return (
     <div ref={containerRef} className="relative h-[500vh] bg-[#050505]">
-      {/* Loading Screen */}
       <AnimatePresence>
         {!isLoaded && (
           <motion.div
@@ -144,35 +135,38 @@ const ArthurReveal = () => {
       </AnimatePresence>
 
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
-        {/* Canvas Background */}
-        <canvas
-          ref={canvasRef}
-          className="w-full h-full object-contain pointer-events-none opacity-80"
-        />
+        {/* Canvas Background with subtle dimming for readability */}
+        <div className="absolute inset-0 z-0">
+          <canvas
+            ref={canvasRef}
+            className="w-full h-full object-contain pointer-events-none opacity-70"
+          />
+          {/* Subtle vignette to focus on text */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)] pointer-events-none" />
+        </div>
 
-        {/* Scroll to Explore */}
         <motion.div
           style={{ opacity: scrollIndicatorOpacity }}
-          className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-20"
         >
-          <span className="text-[10px] uppercase tracking-[0.4em] text-white/40">Scroll to Explore</span>
+          <span className="text-[10px] uppercase tracking-[0.4em] text-white/60 font-bold drop-shadow-md">Scroll to Explore</span>
           <motion.div
             animate={{ y: [0, 5, 0] }}
             transition={{ repeat: Infinity, duration: 2 }}
           >
-            <ChevronDown size={16} className="text-white/20" />
+            <ChevronDown size={16} className="text-white/40" />
           </motion.div>
         </motion.div>
 
         {/* Text Content Sections */}
-        <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 pointer-events-none z-10">
           {/* Phase 1: Hero */}
           <motion.div
             style={{ opacity: textOpacity1, y: textY1 }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
-            <h1 className="text-7xl md:text-9xl font-bold tracking-tighter mb-4">ARTHUR</h1>
-            <p className="text-xl md:text-2xl text-white/60 font-light tracking-wide">Engineered for the future.</p>
+            <h1 className={`text-7xl md:text-9xl font-extrabold tracking-tighter mb-4 text-white ${headingShadow}`}>ARTHUR</h1>
+            <p className={`text-xl md:text-2xl text-white/80 font-medium tracking-wide ${subShadow}`}>Engineered for the future.</p>
           </motion.div>
 
           {/* Phase 2: Intelligence */}
@@ -180,19 +174,19 @@ const ArthurReveal = () => {
             style={{ opacity: textOpacity2, y: textY2 }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 uppercase">Intelligence Unleashed</h2>
-            <div className="flex flex-wrap justify-center gap-8 mt-4">
-              <div className="flex items-center gap-2 text-white/40">
+            <h2 className={`text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 uppercase text-white ${headingShadow}`}>Intelligence Unleashed</h2>
+            <div className="flex flex-wrap justify-center gap-8 mt-4 bg-black/20 backdrop-blur-sm p-6 rounded-full border border-white/5">
+              <div className="flex items-center gap-2">
                 <Cpu size={20} className="text-blue-500" />
-                <span className="text-xs uppercase tracking-widest">Neural Compute</span>
+                <span className="text-xs uppercase tracking-widest font-bold text-white/90">Neural Compute</span>
               </div>
-              <div className="flex items-center gap-2 text-white/40">
+              <div className="flex items-center gap-2">
                 <ShieldCheck size={20} className="text-blue-500" />
-                <span className="text-xs uppercase tracking-widest">Cyber Security</span>
+                <span className="text-xs uppercase tracking-widest font-bold text-white/90">Cyber Security</span>
               </div>
-              <div className="flex items-center gap-2 text-white/40">
+              <div className="flex items-center gap-2">
                 <Cloud size={20} className="text-blue-500" />
-                <span className="text-xs uppercase tracking-widest">Cloud Sync</span>
+                <span className="text-xs uppercase tracking-widest font-bold text-white/90">Cloud Sync</span>
               </div>
             </div>
           </motion.div>
@@ -202,8 +196,8 @@ const ArthurReveal = () => {
             style={{ opacity: textOpacity3, y: textY3 }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-4 uppercase">Power in Motion</h2>
-            <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto font-light">
+            <h2 className={`text-5xl md:text-7xl font-extrabold tracking-tighter mb-4 uppercase text-white ${headingShadow}`}>Power in Motion</h2>
+            <p className={`text-lg md:text-xl text-white/90 max-w-2xl mx-auto font-medium bg-black/40 backdrop-blur-md p-4 rounded-xl ${subShadow}`}>
               A symphony of performance and elegance, built for those who dare to build what's next.
             </p>
           </motion.div>
@@ -213,22 +207,19 @@ const ArthurReveal = () => {
             style={{ opacity: textOpacity4, y: textY4 }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 uppercase">Engineered Inside Out</h2>
-            <p className="text-white/40 mb-12 max-w-xl text-sm tracking-widest uppercase">Precision. Intelligence. Performance.</p>
+            <h2 className={`text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 uppercase text-white ${headingShadow}`}>Engineered Inside Out</h2>
+            <p className={`text-white/80 mb-12 max-w-xl text-sm tracking-[0.3em] uppercase font-bold ${subShadow}`}>Precision. Intelligence. Performance.</p>
 
             <div className="flex gap-4 pointer-events-auto">
-              <button className="px-8 py-3 bg-white text-black text-xs font-bold uppercase tracking-[0.2em] rounded-full hover:bg-blue-500 hover:text-white transition-all duration-500">
+              <button className="px-10 py-4 bg-white text-black text-xs font-black uppercase tracking-[0.2em] rounded-full hover:bg-blue-600 hover:text-white transition-all duration-500 shadow-xl shadow-blue-500/10">
                 Explore Features
               </button>
-              <button className="px-8 py-3 border border-white/10 text-white text-xs font-bold uppercase tracking-[0.2em] rounded-full hover:bg-white/5 transition-all duration-500">
+              <button className="px-10 py-4 border-2 border-white/20 text-white text-xs font-black uppercase tracking-[0.2em] rounded-full hover:bg-white/10 transition-all duration-500 backdrop-blur-sm">
                 Watch Experience
               </button>
             </div>
           </motion.div>
         </div>
-
-        {/* Ambient Glow */}
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.05)_0%,transparent_70%)]" />
       </div>
     </div>
   );
